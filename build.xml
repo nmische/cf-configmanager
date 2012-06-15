@@ -1,0 +1,13 @@
+<project name="cf-configmanager" basedir="." default="buildzip">
+	
+	<target name="clean">
+		<delete file="${basedir}/configmanager.zip"/>
+	</target>
+	
+	<target name="buildzip" depends="clean">
+		<zip destfile="${basedir}/configmanager.zip"
+		       basedir="${basedir}"
+		       excludes=".*/**,.*,settings.xml,build.xml,tests/**" />
+	</target>
+	
+</project>

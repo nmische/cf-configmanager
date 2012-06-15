@@ -3,7 +3,21 @@ ColdFusion Configuration Manager
 
 The ColdFusion Configuration Manager provides remote access to setter functions in the [ColdFusion Administrator API](http://help.adobe.com/en_US/ColdFusion/9.0/Admin/WSc3ff6d0ea77859461172e0811cbf364104-7fcf.html) via a very simple wrapper API.
 
-To set a value simply post a JSON document to /CFIDE/administrator/configmanager/api/index.cfm including administrator credentials via basic authentication. The JSON document should identify the administrator api component, method, and method invocation arguments. For example, to call the `runtime.cfc`'s `setCacheProperty` method with and argument collection of `{ propertyName="TrustedCache", propertyValue=true }` you would post the following JSON.
+Installation
+------------
+
+Download the configmanager.zip file and extract to a folder named `configmanager` under the ColdFusion Administrator directory. You can optionally create a link to the extension by adding the following to the Administrator's `custommenu.xml`.
+
+    <submenu label="Configuration Manager">
+        <menuitem href="configmanager/index.cfm" target="content">Recent Changes</menuitem>
+    </submenu>
+
+For more information see the [Custom Extensions](http://help.adobe.com/en_US/ColdFusion/9.0/Admin/WSc3ff6d0ea77859461172e0811cbf3638e6-7fbf.html) section of the ColdFusion Administrator documentation.
+
+Usage
+-----
+
+To set a configuration value simply post a JSON document to /CFIDE/administrator/configmanager/api/index.cfm including administrator credentials via basic authentication. The JSON document should identify the administrator api component, method, and method invocation arguments. For example, to call the `runtime.cfc`'s `setCacheProperty` method with and argument collection of `{ propertyName="TrustedCache", propertyValue=true }` you would post the following JSON.
 
     { 
         "runtime" : { 
