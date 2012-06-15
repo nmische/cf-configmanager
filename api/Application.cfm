@@ -49,7 +49,6 @@
 				<cfset invocations = adminObj[setter] />
 
 				<cfloop array="#invocations#" index="args">
-					<!---<cfset adminComponent.setCacheProperty(argumentCollection=args) />--->
 					<cfinvoke component="#adminComponent#" method="set#setter#" argumentCollection="#args#" />
 					<cfset logInfo("Invoked #objName#.set#setter#. Arguments: #serializeJSON(args)#.") />
 				</cfloop>
