@@ -2,9 +2,9 @@
 
 	<cffunction name="beforeTests">
 		<cfscript>
-			variables.apiUrl = "http://127.0.0.1:8500/CFIDE/administrator/configmanager/api/index.cfm";
+			variables.apiUrl = "http://127.0.0.1:8500/CFIDE/administrator/configmanager/api/config.cfm";
 			variables.username = "admin";
-			variables.password = "password";
+			variables.password = "vagrant";
 		</cfscript>
 	</cffunction>
 
