@@ -2,7 +2,7 @@
 
     <cffunction name="beforeTests">
         <cfscript>
-            variables.apiUrl = "http://127.0.0.1:8500/CFIDE/administrator/configmanager/api/entmanger.cfm";
+            variables.apiUrl = "http://127.0.0.1:8500/CFIDE/administrator/configmanager/api/entmanager.cfm";
             variables.username = "admin";
             variables.password = "vagrant";
         </cfscript>

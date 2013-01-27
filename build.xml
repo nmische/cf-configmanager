@@ -1,4 +1,7 @@
 <project name="cf-configmanager" basedir="." default="buildzip">
+
+	<property name="cf.dir" value="/opt/coldfusion10/cfusion"/>
+	<property name="configmanager.dir" value="${cf.dir}/wwwroot/CFIDE/administrator/configmanager"/>
 	
 	<target name="clean">
 		<delete file="${basedir}/configmanager.zip"/>
@@ -8,6 +11,14 @@
 		<zip destfile="${basedir}/configmanager.zip"
 		       basedir="${basedir}"
 		       excludes=".*/**,.*,settings.xml,build.xml,tests/**" />
+	</target>
+
+	<target name="install">
+		<delete dir="${configmanager.dir}" />
+		<mkdir dir="${configmanager.dir}" />
+		<copy todir="${configmanager.dir}">
+    		<fileset dir="${basedir}" excludes=".*/**,.*,settings.xml,build.xml,tests/**,README.md" />
+  		</copy>
 	</target>
 	
 </project>
