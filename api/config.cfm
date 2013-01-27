@@ -1,4 +1,3 @@
-
 <cfsilent>
 
 <cfset rawData = GetHttpRequestData().content />
