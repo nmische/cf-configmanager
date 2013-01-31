@@ -12,6 +12,8 @@
     <cfabort />
 </cfif>
 
+<cflock name="CF_CONFIGMANAGER_CONFIG" type="exclusive" timeout="60" throwontimeout="true">
+
 <cfloop collection="#adminSettings#" item="objName">
     <cftry>
         <!--- for each key in the adminSettings struct, try to initilize the coresponding admin api component --->
@@ -47,6 +49,8 @@
     </cftry>
 
 </cfloop>
+
+</cflock>
 
 <cfheader statuscode="200" statustext="Success" />
 

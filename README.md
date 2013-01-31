@@ -65,11 +65,39 @@ The ColdFusion Configuration Manager also supports instance and cluster managmen
 
 #### New Local Instance
 
-    { 
-        "action" : "addNewInstance",
-        "params" : {
-            "serverName" : "cfusion2",
-            "serverDir" : "/opt/coldfusion10/cfusion2" // optional
-        }
+    {
+      "action": "addServer",
+      "params": {
+        "serverName": "cfusion2",
+        "serverDir": "/opt/coldfusion10/cfusion2" //optional
+      }
     }
             
+
+#### New Remote Instance
+    {
+      "action": "addRemoteServer",
+      "params": {
+        "remoteServerName": "testRemote",
+        "host": "192.168.33.12",
+        "jvmRoute": "cfusion",
+        "remotePort": "8012",
+        "httpPort": "8005",
+        "adminPort": "9443", //optional
+        "adminUsername": "admin", //optional
+        "adminPassword": "password", //optional
+        "lbFactor": "1", //optional, default == '1'
+        "https": "true" //optional, default == 'false'
+      }
+    }
+
+#### New Cluster
+    {
+      "action": "addCluster",
+      "params": {
+        "clusterName": "testCluster",
+        "multicastPort": "45599", // optional
+        "stickySessions": "false", // optional
+        "servers": "cfusion,cfusion2,testRemote" //optional
+      }
+    }
