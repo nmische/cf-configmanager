@@ -36,6 +36,8 @@
 
                 <cfcatch type="any">
                     <cfset logError("Error invoking #objName#.set#setter#. Error Message: #cfcatch.message#. Arguments: #serializeJSON(args)#.") />
+                    <cfheader statuscode="500" statustext="Error: #cfcatch.message#" />
+                    <cfabort />
                 </cfcatch>
 
             </cftry>
@@ -44,6 +46,8 @@
 
         <cfcatch type="any">
             <cfset logError("Error creating #objName#. #cfcatch.message#") />
+            <cfheader statuscode="500" statustext="Error: #cfcatch.message#" />
+            <cfabort />
         </cfcatch>
 
     </cftry>
