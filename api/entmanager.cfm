@@ -9,7 +9,7 @@
 </cfif>
 
 <!--- parse the json request --->
-<cfset rawData = GetHttpRequestData().content />
+<cfset rawData = req.content />
 <cfif IsBinary(rawData)>
     <cfset rawData = ToString(rawData) />
 </cfif>
@@ -44,8 +44,8 @@
             <cfset processServer.setConfigDir(server.coldfusion.rootdir & "/../config") />
 
             <cfif not processServer.isServerExists(serverName)>
-                <cfset processServer.setServerName(serverName) />
-                <cfset processServer.setServerDir(serverDir) />
+                <cfset processServer.setServerName( JavaCast("String",serverName) ) />
+                <cfset processServer.setServerDir( JavaCast("String",serverDir) ) />
                 <cfset processServer.addServer() />
                 <cfset logInfo("Added new local instance #serverName# at #serverDir#") />
             </cfif>
@@ -62,22 +62,35 @@
             <cfset httpPort = jsonData.params.httpPort />
 
             <!--- optional params --->
-            <cfparam name="jsonData.params.adminPort" type="string" default="" />
+            <cfparam name="jsonData.params.adminPort" type="integer" default="0" />
             <cfset adminPort = jsonData.params.adminPort />
             <cfparam name="jsonData.params.adminUsername" type="string" default="" />
             <cfset adminUsername = jsonData.params.adminUsername />
             <cfparam name="jsonData.params.adminPassword" type="string" default="" />
             <cfset adminPassword = jsonData.params.adminPassword />
-            <cfparam name="jsonData.params.lbFactor" type="string" default="1" />
+            <cfparam name="jsonData.params.lbFactor" type="integer" default="1" />
             <cfset lbFactor = jsonData.params.lbFactor />
-            <cfparam name="jsonData.params.https" type="string" default="false" />
-            <cfset https = jsonData.params.https />         
+            <cfparam name="jsonData.params.https" type="boolean" default="false" />
+            <cfset https = jsonData.params.https />
+
+            <cfif adminPort eq 0>
+                <cfset adminPort eq "" />
+            </cfif>   
            
             <cfset processServer = CreateObject("java", "com.adobe.coldfusion.entman.ProcessServer").init() />
             <cfset processServer.setConfigDir(server.coldfusion.rootdir & "/../config") />
 
             <cfif not processServer.isServerExists(remoteServerName)>
-                <cfset processServer.addRemoteServer(remoteServerName, host, jvmRoute, remotePort, httpPort, adminPort, adminUsername, adminPassword, lbFactor, https) />
+                <cfset processServer.addRemoteServer( JavaCast("String",remoteServerName), 
+                                                      JavaCast("String",host), 
+                                                      JavaCast("String",jvmRoute), 
+                                                      JavaCast("String",remotePort), 
+                                                      JavaCast("String",httpPort), 
+                                                      JavaCast("String",adminPort), 
+                                                      JavaCast("String",adminUsername), 
+                                                      JavaCast("String",adminPassword), 
+                                                      JavaCast("String",lbFactor), 
+                                                      JavaCast("String",https) ) />
                 <cfset logInfo("Added new remote instance #remoteServerName#") />
             </cfif>
 
@@ -109,18 +122,20 @@
                 
             <!--- create the cluster if necessary --->
             <cfif isNewCluster >
-                <cfset clusterManager.addCluster(clusterName) />
+                <cfset clusterManager.addCluster( JavaCast("String",clusterName) ) />
                 <cfif multicastPort gt 0>
-                    <cfset clusterManager.setMultiCastPort(clusterName, multicastPort) />                    
+                    <cfset clusterManager.setMultiCastPort( JavaCast("String",clusterName), 
+                                                            JavaCast("String",multicastPort) ) />                    
                 </cfif>
                 <cfset logInfo("Added new cluster #clusterName#.") />
             </cfif>             
            
             <!--- it seems if we change the mutlicast port on an existing cluster we have to drop and recreate the cluster --->
             <cfif (isExistingCluster) and (multicastPort gt 0) and (multicastPort neq clusterManager.getMulticastPort(clusterName)) >                    
-                <cfset clusterManager.removeCluster(clusterName) />           
-                <cfset clusterManager.addCluster(clusterName) />                   
-                <cfset clusterManager.setMultiCastPort(clusterName, multicastPort) />
+                <cfset clusterManager.removeCluster( JavaCast("String",clusterName) ) />           
+                <cfset clusterManager.addCluster( JavaCast("String",clusterName) ) />                   
+                <cfset clusterManager.setMultiCastPort( JavaCast("String",clusterName), 
+                                                        JavaCast("String",multicastPort) ) />
                 <cfset logInfo("Modified multicast port for #clusterName#. Multicast port is now #multicastPort#.") />
             </cfif>
 
@@ -129,14 +144,16 @@
             <!--- set the sticky sessions if necessary--->
 
             <cfif stickySessions neq clusterManager.getStickySession(clusterName) >
-                <cfset clusterManager.setStickySession(clusterName, stickySessions) /> 
+                <cfset clusterManager.setStickySession( JavaCast("String",clusterName), JavaCast("String",stickySessions) ) /> 
             </cfif>
 
             <!--- now calculate servers to remove --->            
             <cfif StructKeyExists(clusterList,clusterName) and ArrayLen(clusterList[clusterName])>
                 <cfloop array="#clusterList[clusterName]#" index="serverToRemove">
                     <cfif not ArrayContains(servers,serverToRemove)>
-                        <cfset clusterManager.removeCluster(clusterName, Trim(serverToRemove), JavaCast("boolean",0)) />
+                        <cfset clusterManager.removeCluster( JavaCast("String",clusterName), 
+                                                             JavaCast("String",Trim(serverToRemove)), 
+                                                             JavaCast("boolean",0) ) />
                         <cfset logInfo("Removed server #serverToRemove# from cluster #clusterName#.") />
                     </cfif>
                 </cfloop>
@@ -146,7 +163,8 @@
             <cfif ArrayLen(servers)>
                 <cfloop array="#servers#" index="serverToAdd">
                     <cfif not StructKeyExists(clusterList,clusterName) or not ArrayContains(clusterList[clusterName],serverToAdd)>
-                        <cfset clusterManager.addCluster(clusterName, Trim(serverToAdd)) />
+                        <cfset clusterManager.addCluster( JavaCast("String",clusterName), 
+                                                          JavaCast("String",Trim(serverToAdd)) ) />
                         <cfset logInfo("Added server #serverToAdd# to cluster #clusterName#.") />
                     </cfif>  
                 </cfloop>                          

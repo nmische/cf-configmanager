@@ -1,6 +1,6 @@
 <cfsilent>
 
-<cfset rawData = GetHttpRequestData().content />
+<cfset rawData = req.content />
 <cfif IsBinary(rawData)>
     <cfset rawData = ToString(rawData) />
 </cfif>

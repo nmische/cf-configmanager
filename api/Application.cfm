@@ -5,12 +5,17 @@
 <cfset username="" />
 <cfset password="" />
 
+<cfset req = GetHttpRequestData() />
+
 <!--- check credentials --->
-<cfset authHeader = GetPageContext().getRequest().getHeader("Authorization") />
+<cfif StructKeyExists(req.headers, "Authorization") >
+  <cfset authHeader = req.headers["Authorization"] />
+</cfif>
+
 <cfif IsDefined("authHeader")>
 	<cfset authString = ToString(BinaryDecode(ListLast(authHeader, " "),"Base64")) />
-	<cfset username = GetToken(authString,1,":") />
-	<cfset password = GetToken(authString,2,":") />
+	<cfset username = ListFirst(authString,":") />
+	<cfset password = ListRest(authString,":") />
 </cfif>
 <cfset admin = CreateObject("component","cfide.adminapi.administrator") />
 

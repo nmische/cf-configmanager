@@ -230,5 +230,20 @@
       
     </cffunction>
 
+    <cffunction name="testAddRemoteServerWithInt" order="13">
+        <cfset var apiResult = "" />
+   
+        <cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult">
+            <cfhttpparam type="header" name="Content-Type" value="application/json" />
+            <cfhttpparam type="body" value="{""params"":{""jvmRoute"":""cfusion"", ""httpPort"":8005, ""remotePort"":8012, ""remoteServerName"":""node2"", ""lbFactor"":1, ""host"":""192.168.33.102""}, ""action"":""addRemoteServer""}"/>
+        </cfhttp>
+
+        <cfset assertEquals("200 SUCCESS",apiResult.statusCode) />        
+      
+    </cffunction>
+
+
+    
+
     
 </cfcomponent>
