@@ -1,24 +1,12 @@
 <cfsilent>
 
-<cfset rawData = req.content />
-<cfif IsBinary(rawData)>
-    <cfset rawData = ToString(rawData) />
-</cfif>
-
-<cfif IsJSON(rawData)>
-    <cfset adminSettings = DeserializeJSON(rawData) />
-<cfelse>
-    <cfheader statuscode="400" statustext="Bad Request" />
-    <cfabort />
-</cfif>
-
 <cflock name="CF_CONFIGMANAGER_CONFIG" type="exclusive" timeout="60" throwontimeout="true">
 
-<cfloop collection="#adminSettings#" item="objName">
+<cfloop collection="#jsonData#" item="objName">
     <cftry>
         <!--- for each key in the adminSettings struct, try to initilize the coresponding admin api component --->
         <cfset adminComponent = createObject("component","CFIDE.adminapi.#objName#") />
-        <cfset adminObj = adminSettings[objName] />
+        <cfset adminObj = jsonData[objName] />
         <!---
         for each key in the admin api component struct, try to invoke the corresponding setter method
         note: keys correspond to setter methods, without the "set" prefix so

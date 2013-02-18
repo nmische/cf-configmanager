@@ -5,17 +5,12 @@
 <cfset username="" />
 <cfset password="" />
 
-<cfset req = GetHttpRequestData() />
-
 <!--- check credentials --->
-<cfif StructKeyExists(req.headers, "Authorization") >
-  <cfset authHeader = req.headers["Authorization"] />
-</cfif>
-
+<cfset authHeader = GetPageContext().getRequest().getHeader("Authorization") />
 <cfif IsDefined("authHeader")>
-	<cfset authString = ToString(BinaryDecode(ListLast(authHeader, " "),"Base64")) />
-	<cfset username = ListFirst(authString,":") />
-	<cfset password = ListRest(authString,":") />
+    <cfset authString = ToString(BinaryDecode(ListLast(authHeader, " "),"Base64")) />
+    <cfset username = GetToken(authString,1,":") />
+    <cfset password = GetToken(authString,2,":") />
 </cfif>
 <cfset admin = CreateObject("component","cfide.adminapi.administrator") />
 
@@ -23,6 +18,19 @@
 	<cfheader statuscode="401" statustext="UNAUTHORIZED" />
 	<cfheader name="WWW-Authenticate" value="Basic realm=""ColdFusion Admin Configuration Management""" />
 	<cfabort />
+</cfif>
+
+<!--- parse the json request --->
+<cfset rawData = GetHttpRequestData().content />
+<cfif IsBinary(rawData)>
+    <cfset rawData = ToString(rawData) />
+</cfif>
+
+<cfif IsJSON(rawData)>
+    <cfset jsonData = DeserializeJSON(rawData) />
+<cfelse>
+    <cfheader statuscode="400" statustext="Bad Request" />
+    <cfabort />
 </cfif>
 
 <cffunction name="logInfo">

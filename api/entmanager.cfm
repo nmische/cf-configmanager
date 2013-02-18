@@ -8,19 +8,6 @@
     <cfabort />
 </cfif>
 
-<!--- parse the json request --->
-<cfset rawData = req.content />
-<cfif IsBinary(rawData)>
-    <cfset rawData = ToString(rawData) />
-</cfif>
-
-<cfif IsJSON(rawData)>
-    <cfset jsonData = DeserializeJSON(rawData) />
-<cfelse>
-    <cfheader statuscode="400" statustext="Bad Request" />
-    <cfabort />
-</cfif>
-
 <cftry>
 
     <cflock name="CF_CONFIGMANAGER_ENTMANGER" type="exclusive" timeout="60" throwontimeout="true">
