@@ -5,7 +5,13 @@
 <cfloop collection="#jsonData#" item="objName">
     <cftry>
         <!--- for each key in the adminSettings struct, try to initilize the coresponding admin api component --->
-        <cfset adminComponent = createObject("component","CFIDE.adminapi.#objName#") />
+
+        <cfif fileExists(expandPath("./idempotent/#lcase(objName)#.cfc"))>
+            <cfset adminComponent = createObject("component","idempotent.#objName#") />
+        <cfelse>
+            <cfset adminComponent = createObject("component","CFIDE.adminapi.#objName#") />
+        </cfif>
+        
         <cfset adminObj = jsonData[objName] />
         <!---
         for each key in the admin api component struct, try to invoke the corresponding setter method
