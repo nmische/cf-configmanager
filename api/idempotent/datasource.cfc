@@ -70,7 +70,7 @@
 		<cfset super.setMSSQL(argumentcollection=testArgs) />
 		<cfset existing = getDatasources(arguments.name) />
 		<cfset updated = getDatasources(tmpName) />
-		<cfif datasourcesAreEqual(existing,updated,comparePasswords)>	
+		<cfif datasourcesAreEqual(existing,updated)>	
 			<cfset logInfo("Datasource #arguments.name# not updated.") />		
 		<cfelse>
 			<cfset super.setMSSQL(argumentcollection=arguments) />
@@ -86,8 +86,7 @@
 	<cffunction name="datasourcesAreEqual">
 		<cfargument name="datasource1" />
 		<cfargument name="datasource2" />
-		<cfargument name="comparePasswords" />
-
+		
 		<cfset var key="" />
 
 		<cfloop collection="#datasource1#" item="key">
@@ -100,7 +99,7 @@
 			</cfif>
 			<cfif not isSimpleValue(datasource2[key])
 				  or compareNoCase(datasource1[key],datasource2[key]) neq 0 >
-				<cfset logInfo("Datasource #arguments.name# update triggered by difference in #key#.") />
+				<cfset logInfo("Datasource #datasource1.name# update triggered by difference in #key#.") />
 				<cfreturn false />
 			</cfif>
 		</cfloop>
