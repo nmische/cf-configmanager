@@ -1,116 +1,75 @@
 <cfcomponent extends="CFIDE.adminapi.datasource">
 	
 	<cffunction name="setMSSQL">
-		<cfargument name="vendor" default="sqlserver" type="string" />
-		<cfargument name="type" default="ddtek" type="string" />
-		<cfargument name="name" required="true" type="string" />
-		<cfargument name="host" required="true" type="string" />
-		<cfargument name="database" required="true" type="string" />
-		<cfargument name="originaldsn" default="" type="string" />
-		<cfargument name="port" default="1433" type="string" />
-		<cfargument name="driver" default="MSSQLServer" type="string" />
-		<cfargument name="class" default="macromedia.jdbc.MacromediaDriver" type="string" />
-		<cfargument name="username" default="" type="string" />
-		<cfargument name="password" default="" type="string" />
-		<cfargument name="encryptpassword" default="true" type="boolean" />
-		<cfargument name="description" default="" type="string" />
-		<cfargument name="args" type="string" />
-		<cfargument name="sendStringParametersAsUnicode" type="boolean" />
-		<cfargument name="selectmethod" default="cursor" required="true" type="string" />
-		<cfargument name="MaxPooledStatements" type="numeric" />
-		<cfargument name="timeout" type="numeric" />
-		<cfargument name="interval" type="numeric" />
-		<cfargument name="login_timeout" type="numeric" />
-		<cfargument name="buffer" type="numeric" />
-		<cfargument name="blob_buffer"type="numeric" />
-		<cfargument name="enablemaxconnections" type="boolean" />
-		<cfargument name="maxconnections" type="numeric" />
-		<cfargument name="pooling" type="boolean" />
-		<cfargument name="disable" type="boolean" />
-		<cfargument name="disable_clob" type="boolean" />
-		<cfargument name="disable_blob" type="boolean" />
-		<cfargument name="disable_autogenkeys" type="boolean" />
-		<cfargument name="select" type="boolean" />
-		<cfargument name="create" type="boolean" />
-		<cfargument name="grant" type="boolean" />
-		<cfargument name="insert" type="boolean" />
-		<cfargument name="drop" type="boolean" />
-		<cfargument name="revoke" type="boolean" />
-		<cfargument name="update" type="boolean" />
-		<cfargument name="alter" type="boolean" />
-		<cfargument name="storedproc" type="boolean" />
-		<cfargument name="delete" type="boolean" />
-		<cfargument name="validationQuery" default="" type="string" />
-		<cfargument name="qTimeout" type="numeric" />
-		<cfargument name="useSpyLog" type="boolean" />
-		<cfargument name="spyLogFile" type="string" />
-		<cfargument name="validateConnection" type="boolean" />
-		<cfargument name="clientHostName" type="boolean" />
-		<cfargument name="clientuser" type="boolean" />
-		<cfargument name="applicationName" type="boolean" />
-		<cfargument name="applicationNamePrefix" type="string" />
 
-
-		<!--- if the datasource does not exist create it --->
+		<cfset var savedConfigHash = getConfigHash(arguments.name) />
+		<cfset var newConfigHash = hashArgs(arguments) />
 		<cfset var datasources = getDatasources() />
-		<cfset var testArgs = "" />
-		<cfset var tmpName = "" />
-		<cfset var existing = "" />
-		<cfset var updated = "" />
-		
+
+		<!--- 
+		if the datasource doesn't exist or if what we have cached 
+		on disk doesn't match what we have passed in we need to do an update
+		--->
 		<cfif not structKeyExists(datasources,name)>
 			<cfset super.setMSSQL(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
 			<cfset logInfo("Datasource #arguments.name# created.") />
-			<cfreturn />
-		</cfif>
-
-		<!--- if the datasource does exist test to see if we need to update it --->
-		<cfset testArgs = duplicate(arguments) />
-		<cfset testArgs.name = tmpName = "#arguments.name#_config_test" />
-		<cfset super.setMSSQL(argumentcollection=testArgs) />
-		<cfset existing = getDatasources(arguments.name) />
-		<cfset updated = getDatasources(tmpName) />
-		<cfif datasourcesAreEqual(existing,updated)>	
-			<cfset logInfo("Datasource #arguments.name# not updated.") />		
-		<cfelse>
+		<cfelseif compare(savedConfigHash,newConfigHash) neq 0>
 			<cfset super.setMSSQL(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
 			<cfset logInfo("Datasource #arguments.name# updated.") />
-			<cfreturn />
+		<cfelse>		
+			<cfset logInfo("Datasource #arguments.name# not updated.") />	
 		</cfif>
-		<cfset deleteDatasource(tmpName) />
 
 		<cfreturn />
 
 	</cffunction>
 
-	<cffunction name="datasourcesAreEqual">
-		<cfargument name="datasource1" />
-		<cfargument name="datasource2" />
-		
-		<cfset var key="" />
+	<cffunction name="hashArgs">
+		<cfargument name="args" required="true" type="struct" />
+		<cfset var serializedArgs = serializeArgs(arguments.args) />
+		<cfreturn hash(serializedArgs) />
+	</cffunction>
 
-		<cfloop collection="#datasource1#" item="key">
-			<!--- skip name, password, non simple values, and missing keys --->
-			<cfif key eq "name"
-			      or key eq "password"
-			      or not isSimpleValue(datasource1[key]) 
-			      or not structKeyExists(datasource2,key)>
-				<cfcontinue />
-			</cfif>
-			<cfif not isSimpleValue(datasource2[key])
-				  or compareNoCase(datasource1[key],datasource2[key]) neq 0 >
-				<cfset logInfo("Datasource #datasource1.name# update triggered by difference in #key#.") />
-				<cfreturn false />
-			</cfif>
+	<cffunction name="serializeArgs">
+		<cfargument name="args" required="true" type="struct" />
+		<cfset var serializedArgs = [] />
+		<cfset var key = "" />
+		<cfset var keys = structKeyArray(arguments.args) />
+		<cfset var sorted = arraySort(keys,"textnocase") />
+		<cfloop array="#keys#" index="key">
+			<cfset arrayAppend(serializedArgs,ucase(key)) />
+			<cfset arrayAppend(serializedArgs,toString(arguments.args[key])) />
 		</cfloop>
+		<cfreturn arrayToList(serializedArgs,":") />
+	</cffunction>
 
-		<cfreturn true />
+	<cffunction name="getConfigHash">
+		<cfargument name="name" required="true" type="string" />
+		<cfset var cacheFilePath = "#getDirectoryFromPath(getCurrentTemplatePath())#cache/datasource/#name#" />
+		<cfset var configHash = "" />
+		<cfif fileExists(cacheFilePath)>
+			<cffile action="read" file="#cacheFilePath#" variable="configHash" />
+			<cfreturn trim(configHash) />
+		</cfif>
+		<cfreturn "" />
+	</cffunction>
 
+	<cffunction name="putConfigHash">
+		<cfargument name="name" required="true" type="string" />
+		<cfargument name="configHash" required="true" type="string" />
+		<cfset var cacheDirectory = "#getDirectoryFromPath(getCurrentTemplatePath())#cache/datasource" />
+		<cfset var cacheFilePath = "#cacheDirectory#/#name#" />
+		<cfif not directoryExists(cacheDirectory)>
+			<cfdirectory action="create" directory="#cacheDirectory#" mode="777" />
+		</cfif>
+		<cffile action="write" file="#cacheFilePath#" output="#configHash#" mode="644" addnewline="false" />
 	</cffunction>
 
 	<cffunction name="logInfo">
-		<cfargument name="msg" />
-		<cflog text="#Replace(arguments.msg,"""","'","all")#" application="no" file="configmanager" type="Information" />
+    	<cfargument name="msg" />
+    	<cflog text="#Replace(arguments.msg,"""","'","all")#" application="no" file="configmanager" type="Information" />
 	</cffunction>
 
 	<cffunction name="logError">

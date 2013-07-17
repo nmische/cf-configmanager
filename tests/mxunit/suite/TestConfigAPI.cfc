@@ -205,6 +205,62 @@
 
 	</cffunction>
 
+	<cffunction name="testUpdateMSSQLNWithPasswordChange">
+		<cfset var apiResult1 = "" />
+		<cfset var apiResult2 = "" />
+
+		<cfset var jsonStruct1 = { 
+					datasource = { 
+						MSSql = [ 
+						   {
+							 name = "test_mssql", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test",
+							 sendStringParametersAsUnicode = true,
+							 disable_clob = false,
+							 disable_blob = false
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData1 = SerializeJSON(jsonStruct1) />
+
+		<cfset var jsonStruct2 = { 
+					datasource = { 
+						MSSql = [ 
+						   {
+							 name = "test_mssql", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test2",
+							 sendStringParametersAsUnicode = true,
+							 disable_clob = false,
+							 disable_blob = false
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData2 = SerializeJSON(jsonStruct2) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult1">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData1#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult1.statusCode) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult2">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData2#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult2.statusCode) />
+
+	</cffunction>
+
 	<cffunction name="testApiCallWithMultipleSettings">
 		<cfset var apiResult = "" />		
 		<cfset var mappingPath = GetDirectoryFromPath(ExpandPath('.')) />
