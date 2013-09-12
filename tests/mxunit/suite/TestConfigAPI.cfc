@@ -6,14 +6,41 @@
 			variables.username = "admin";
 			variables.password = "vagrant";
 		</cfscript>
+		<cfset deleteTestDatasource("test_db2") />
+		<cfset deleteTestDatasource("test_derbyclient") />
+		<cfset deleteTestDatasource("test_derbyembedded") />
+		<cfset deleteTestDatasource("test_infomix") />
+		<cfset deleteTestDatasource("test_msaccess") />
+		<cfset deleteTestDatasource("test_msaccessunicode") />
+		<cfset deleteTestDatasource("test_mssql") />
+		<cfset deleteTestDatasource("test_mysql5") />
+		<cfset deleteTestDatasource("test_mysql_dd") />
+		<cfset deleteTestDatasource("test_odbcsocket") />
+		<cfset deleteTestDatasource("test_oracle") />
+		<cfset deleteTestDatasource("test_other") />
+		<cfset deleteTestDatasource("test_postgresql") />
+		<cfset deleteTestDatasource("test_sybase") />
 	</cffunction>
 
 	<cffunction name="setup">
-		<cfset deleteTestDatasource("test_mssql") />
+		
 	</cffunction>
 
 	<cffunction name="teardown">
+		<cfset deleteTestDatasource("test_db2") />
+		<cfset deleteTestDatasource("test_derbyclient") />
+		<cfset deleteTestDatasource("test_derbyembedded") />
+		<cfset deleteTestDatasource("test_infomix") />
+		<cfset deleteTestDatasource("test_msaccess") />
+		<cfset deleteTestDatasource("test_msaccessunicode") />
 		<cfset deleteTestDatasource("test_mssql") />
+		<cfset deleteTestDatasource("test_mysql5") />
+		<cfset deleteTestDatasource("test_mysql_dd") />
+		<cfset deleteTestDatasource("test_odbcsocket") />
+		<cfset deleteTestDatasource("test_oracle") />
+		<cfset deleteTestDatasource("test_other") />
+		<cfset deleteTestDatasource("test_postgresql") />
+		<cfset deleteTestDatasource("test_sybase") />	
 	</cffunction>
 
 	<cffunction name="testAuthenticaitonNoCredentials">
@@ -80,6 +107,224 @@
 
 	</cffunction>
 
+	
+
+	<!--- DB2 --->
+
+
+	<cffunction name="testCreateDB2">
+		<cfset var apiResult = "" />
+
+		<cfset var jsonStruct = { 
+					datasource = { 
+						DB2 = [ 
+						   {
+							 name = "test_db2", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test"
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData = SerializeJSON(jsonStruct) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult.statusCode) />
+
+	</cffunction>
+
+
+	<!--- DerbyClient --->
+
+
+	<cffunction name="testCreateDerbyClient">
+		<cfset var apiResult = "" />
+
+		<cfset var jsonStruct = { 
+					datasource = { 
+						DerbyClient = [ 
+						   {
+							 name = "test_derbyclient", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test"
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData = SerializeJSON(jsonStruct) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult.statusCode) />
+
+	</cffunction>
+
+
+	<!--- DerbyEmbedded --->
+
+
+	<cffunction name="testCreateDerbyEmbedded">
+		<cfset var apiResult = "" />
+
+		<cfset var jsonStruct = { 
+					datasource = { 
+						DerbyEmbedded = [ 
+						   {
+							 name = "test_derbyembedded", 
+							 database = "/opt/coldfusion10/cfusion/db/test_derbyembedded",
+							 isnewdb = "true"
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData = SerializeJSON(jsonStruct) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult.statusCode) />
+
+	</cffunction>
+
+
+	<!--- Informix --->
+
+
+	<cffunction name="testCreateInformix">
+		<cfset var apiResult = "" />
+
+		<cfset var jsonStruct = { 
+					datasource = { 
+						Informix = [ 
+						   {
+						     name = "test_infomix", 
+							 host = "sql.example.com",
+							 informixserver = "infomix.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test"
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData = SerializeJSON(jsonStruct) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult.statusCode) />
+
+	</cffunction>
+
+	<!---
+
+	<!--- JNDI --->
+
+
+	<cffunction name="testCreateJNDI">
+		<cfset var apiResult = "" />
+
+		<cfset var jsonStruct = { 
+					datasource = { 
+						JNDI = [ 
+						   {
+						     name = "test_jndi", 
+							 jndiname = "my_jndi",
+							 username = "test",
+							 password = "test"
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData = SerializeJSON(jsonStruct) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult.statusCode) />
+
+	</cffunction>
+
+
+	<!--- MSAccess --->
+
+
+	<cffunction name="testCreateMSAccess">
+		<cfset var apiResult = "" />
+
+		<cfset var jsonStruct = { 
+					datasource = { 
+						MSAccess = [ 
+						   {
+						     name = "test_msaccess", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test"
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData = SerializeJSON(jsonStruct) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult.statusCode) />
+
+	</cffunction>
+
+
+	<!--- MSAccessUnicode --->
+
+
+	<cffunction name="testCreateMSAccessUnicode">
+		<cfset var apiResult = "" />
+
+		<cfset var jsonStruct = { 
+					datasource = { 
+						MSAccessUnicode = [ 
+						   {
+						     name = "test_msaccessunicode", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test"
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData = SerializeJSON(jsonStruct) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult.statusCode) />
+
+	</cffunction>
+
+	--->
 
 	<!--- MSSQL --->
 
@@ -623,6 +868,39 @@
 
 	</cffunction>
 
+	<!---
+
+	<!--- ODBCSocket --->
+
+
+	<cffunction name="testCreateODBCSocket">
+		<cfset var apiResult = "" />
+
+		<cfset var jsonStruct = { 
+					datasource = { 
+						ODBCSocket = [ 
+						   {
+						     name = "test_odbcsocket", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test"
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData = SerializeJSON(jsonStruct) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult.statusCode) />
+
+	</cffunction>
+
+	--->
 
 	<!--- Oracle --->
 
@@ -808,6 +1086,100 @@
 
 	</cffunction>
 
+	<!---
+	
+	<!--- Other --->
+
+
+	<cffunction name="testCreateOther">
+		<cfset var apiResult = "" />
+
+		<cfset var jsonStruct = { 
+					datasource = { 
+						Other = [ 
+						   {
+						     name = "test_other", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test"
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData = SerializeJSON(jsonStruct) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult.statusCode) />
+
+	</cffunction>
+
+	--->
+
+	<!--- PostGreSQL --->
+
+
+	<cffunction name="testCreatePostGreSQL">
+		<cfset var apiResult = "" />
+
+		<cfset var jsonStruct = { 
+					datasource = { 
+						PostGreSQL = [ 
+						   {
+						     name = "test_postgresql", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test"
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData = SerializeJSON(jsonStruct) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult.statusCode) />
+
+	</cffunction>
+
+	
+	<!--- Sybase --->
+
+
+	<cffunction name="testCreateSybase">
+		<cfset var apiResult = "" />
+
+		<cfset var jsonStruct = { 
+					datasource = { 
+						Sybase = [ 
+						   {
+						     name = "test_sybase", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test"
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData = SerializeJSON(jsonStruct) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult.statusCode) />
+
+	</cffunction>
 
 
 

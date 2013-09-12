@@ -1,5 +1,188 @@
 <cfcomponent extends="CFIDE.adminapi.datasource">
-	
+
+
+	 <cffunction name="setDB2">
+
+		<cfset var savedConfigHash = getConfigHash(arguments.name) />
+		<cfset var newConfigHash = hashArgs(arguments) />
+		<cfset var datasources = getDatasources() />
+
+		<!--- 
+		if the datasource doesn't exist or if what we have cached 
+		on disk doesn't match what we have passed in we need to do an update
+		--->
+		<cfif not structKeyExists(datasources,name)>
+			<cfset super.setDB2(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# created.") />
+		<cfelseif compare(savedConfigHash,newConfigHash) neq 0>
+			<cfset super.setDB2(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# updated.") />
+		<cfelse>		
+			<cfset logInfo("Datasource #arguments.name# not updated.") />	
+		</cfif>
+
+		<cfreturn />
+
+	</cffunction>
+
+	<cffunction name="setDerbyClient">
+
+		<cfset var savedConfigHash = getConfigHash(arguments.name) />
+		<cfset var newConfigHash = hashArgs(arguments) />
+		<cfset var datasources = getDatasources() />
+
+		<!--- 
+		if the datasource doesn't exist or if what we have cached 
+		on disk doesn't match what we have passed in we need to do an update
+		--->
+		<cfif not structKeyExists(datasources,name)>
+			<cfset super.setDerbyClient(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# created.") />
+		<cfelseif compare(savedConfigHash,newConfigHash) neq 0>
+			<cfset super.setDerbyClient(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# updated.") />
+		<cfelse>		
+			<cfset logInfo("Datasource #arguments.name# not updated.") />	
+		</cfif>
+
+		<cfreturn />
+
+	</cffunction>
+
+	<cffunction name="setDerbyEmbedded">
+
+		<cfset var savedConfigHash = getConfigHash(arguments.name) />
+		<cfset var newConfigHash = hashArgs(arguments) />
+		<cfset var datasources = getDatasources() />
+
+		<!--- 
+		if the datasource doesn't exist or if what we have cached 
+		on disk doesn't match what we have passed in we need to do an update
+		--->
+		<cfif not structKeyExists(datasources,name)>
+			<cfset super.setDerbyEmbedded(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# created.") />
+		<cfelseif compare(savedConfigHash,newConfigHash) neq 0>
+			<cfset super.setDerbyEmbedded(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# updated.") />
+		<cfelse>		
+			<cfset logInfo("Datasource #arguments.name# not updated.") />	
+		</cfif>
+
+		<cfreturn />
+
+	</cffunction>
+
+	<cffunction name="setInformix">
+
+		<cfset var savedConfigHash = getConfigHash(arguments.name) />
+		<cfset var newConfigHash = hashArgs(arguments) />
+		<cfset var datasources = getDatasources() />
+
+		<!--- 
+		if the datasource doesn't exist or if what we have cached 
+		on disk doesn't match what we have passed in we need to do an update
+		--->
+		<cfif not structKeyExists(datasources,name)>
+			<cfset super.setInformix(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# created.") />
+		<cfelseif compare(savedConfigHash,newConfigHash) neq 0>
+			<cfset super.setInformix(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# updated.") />
+		<cfelse>		
+			<cfset logInfo("Datasource #arguments.name# not updated.") />	
+		</cfif>
+
+		<cfreturn />
+
+	</cffunction>
+
+	<cffunction name="setJNDI">
+
+		<cfset var savedConfigHash = getConfigHash(arguments.name) />
+		<cfset var newConfigHash = hashArgs(arguments) />
+		<cfset var datasources = getDatasources() />
+
+		<!--- 
+		if the datasource doesn't exist or if what we have cached 
+		on disk doesn't match what we have passed in we need to do an update
+		--->
+		<cfif not structKeyExists(datasources,name)>
+			<cfset super.setJNDI(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# created.") />
+		<cfelseif compare(savedConfigHash,newConfigHash) neq 0>
+			<cfset super.setJNDI(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# updated.") />
+		<cfelse>		
+			<cfset logInfo("Datasource #arguments.name# not updated.") />	
+		</cfif>
+
+		<cfreturn />
+
+	</cffunction>
+
+	<cffunction name="setMSAccess">
+
+		<cfset var savedConfigHash = getConfigHash(arguments.name) />
+		<cfset var newConfigHash = hashArgs(arguments) />
+		<cfset var datasources = getDatasources() />
+
+		<!--- 
+		if the datasource doesn't exist or if what we have cached 
+		on disk doesn't match what we have passed in we need to do an update
+		--->
+		<cfif not structKeyExists(datasources,name)>
+			<cfset super.setMSAccess(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# created.") />
+		<cfelseif compare(savedConfigHash,newConfigHash) neq 0>
+			<cfset super.setMSAccess(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# updated.") />
+		<cfelse>		
+			<cfset logInfo("Datasource #arguments.name# not updated.") />	
+		</cfif>
+
+		<cfreturn />
+
+	</cffunction>
+
+	<cffunction name="setMSAccessUnicode">
+
+		<cfset var savedConfigHash = getConfigHash(arguments.name) />
+		<cfset var newConfigHash = hashArgs(arguments) />
+		<cfset var datasources = getDatasources() />
+
+		<!--- 
+		if the datasource doesn't exist or if what we have cached 
+		on disk doesn't match what we have passed in we need to do an update
+		--->
+		<cfif not structKeyExists(datasources,name)>
+			<cfset super.setMSAccessUnicode(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# created.") />
+		<cfelseif compare(savedConfigHash,newConfigHash) neq 0>
+			<cfset super.setMSAccessUnicode(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# updated.") />
+		<cfelse>		
+			<cfset logInfo("Datasource #arguments.name# not updated.") />	
+		</cfif>
+
+		<cfreturn />
+
+	</cffunction>
+
 	<cffunction name="setMSSQL">
 
 		<cfset var savedConfigHash = getConfigHash(arguments.name) />
@@ -78,6 +261,32 @@
 
 	</cffunction>
 
+	<cffunction name="setODBCSocket">
+
+		<cfset var savedConfigHash = getConfigHash(arguments.name) />
+		<cfset var newConfigHash = hashArgs(arguments) />
+		<cfset var datasources = getDatasources() />
+
+		<!--- 
+		if the datasource doesn't exist or if what we have cached 
+		on disk doesn't match what we have passed in we need to do an update
+		--->
+		<cfif not structKeyExists(datasources,name)>
+			<cfset super.setODBCSocket(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# created.") />
+		<cfelseif compare(savedConfigHash,newConfigHash) neq 0>
+			<cfset super.setODBCSocket(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# updated.") />
+		<cfelse>		
+			<cfset logInfo("Datasource #arguments.name# not updated.") />	
+		</cfif>
+
+		<cfreturn />
+
+	</cffunction>
+
 	<cffunction name="setOracle">
 
 		<cfset var savedConfigHash = getConfigHash(arguments.name) />
@@ -94,6 +303,84 @@
 			<cfset logInfo("Datasource #arguments.name# created.") />
 		<cfelseif compare(savedConfigHash,newConfigHash) neq 0>
 			<cfset super.setOracle(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# updated.") />
+		<cfelse>		
+			<cfset logInfo("Datasource #arguments.name# not updated.") />	
+		</cfif>
+
+		<cfreturn />
+
+	</cffunction>
+
+	<cffunction name="setOther">
+
+		<cfset var savedConfigHash = getConfigHash(arguments.name) />
+		<cfset var newConfigHash = hashArgs(arguments) />
+		<cfset var datasources = getDatasources() />
+
+		<!--- 
+		if the datasource doesn't exist or if what we have cached 
+		on disk doesn't match what we have passed in we need to do an update
+		--->
+		<cfif not structKeyExists(datasources,name)>
+			<cfset super.setOther(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# created.") />
+		<cfelseif compare(savedConfigHash,newConfigHash) neq 0>
+			<cfset super.setOther(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# updated.") />
+		<cfelse>		
+			<cfset logInfo("Datasource #arguments.name# not updated.") />	
+		</cfif>
+
+		<cfreturn />
+
+	</cffunction>
+
+	<cffunction name="setPostGreSQL">
+
+		<cfset var savedConfigHash = getConfigHash(arguments.name) />
+		<cfset var newConfigHash = hashArgs(arguments) />
+		<cfset var datasources = getDatasources() />
+
+		<!--- 
+		if the datasource doesn't exist or if what we have cached 
+		on disk doesn't match what we have passed in we need to do an update
+		--->
+		<cfif not structKeyExists(datasources,name)>
+			<cfset super.setPostGreSQL(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# created.") />
+		<cfelseif compare(savedConfigHash,newConfigHash) neq 0>
+			<cfset super.setPostGreSQL(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# updated.") />
+		<cfelse>		
+			<cfset logInfo("Datasource #arguments.name# not updated.") />	
+		</cfif>
+
+		<cfreturn />
+
+	</cffunction>
+
+	<cffunction name="setSybase">
+
+		<cfset var savedConfigHash = getConfigHash(arguments.name) />
+		<cfset var newConfigHash = hashArgs(arguments) />
+		<cfset var datasources = getDatasources() />
+
+		<!--- 
+		if the datasource doesn't exist or if what we have cached 
+		on disk doesn't match what we have passed in we need to do an update
+		--->
+		<cfif not structKeyExists(datasources,name)>
+			<cfset super.setSybase(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# created.") />
+		<cfelseif compare(savedConfigHash,newConfigHash) neq 0>
+			<cfset super.setSybase(argumentcollection=arguments) />
 			<cfset putConfigHash(arguments.name,newConfigHash) />
 			<cfset logInfo("Datasource #arguments.name# updated.") />
 		<cfelse>		
