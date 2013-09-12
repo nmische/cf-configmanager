@@ -26,6 +26,84 @@
 
 	</cffunction>
 
+	<cffunction name="setMySQL5">
+
+		<cfset var savedConfigHash = getConfigHash(arguments.name) />
+		<cfset var newConfigHash = hashArgs(arguments) />
+		<cfset var datasources = getDatasources() />
+
+		<!--- 
+		if the datasource doesn't exist or if what we have cached 
+		on disk doesn't match what we have passed in we need to do an update
+		--->
+		<cfif not structKeyExists(datasources,name)>
+			<cfset super.setMySQL5(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# created.") />
+		<cfelseif compare(savedConfigHash,newConfigHash) neq 0>
+			<cfset super.setMySQL5(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# updated.") />
+		<cfelse>		
+			<cfset logInfo("Datasource #arguments.name# not updated.") />	
+		</cfif>
+
+		<cfreturn />
+
+	</cffunction>
+
+	<cffunction name="setMySQL_DD">
+
+		<cfset var savedConfigHash = getConfigHash(arguments.name) />
+		<cfset var newConfigHash = hashArgs(arguments) />
+		<cfset var datasources = getDatasources() />
+
+		<!--- 
+		if the datasource doesn't exist or if what we have cached 
+		on disk doesn't match what we have passed in we need to do an update
+		--->
+		<cfif not structKeyExists(datasources,name)>
+			<cfset super.setMySQL_DD(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# created.") />
+		<cfelseif compare(savedConfigHash,newConfigHash) neq 0>
+			<cfset super.setMySQL_DD(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# updated.") />
+		<cfelse>		
+			<cfset logInfo("Datasource #arguments.name# not updated.") />	
+		</cfif>
+
+		<cfreturn />
+
+	</cffunction>
+
+	<cffunction name="setOracle">
+
+		<cfset var savedConfigHash = getConfigHash(arguments.name) />
+		<cfset var newConfigHash = hashArgs(arguments) />
+		<cfset var datasources = getDatasources() />
+
+		<!--- 
+		if the datasource doesn't exist or if what we have cached 
+		on disk doesn't match what we have passed in we need to do an update
+		--->
+		<cfif not structKeyExists(datasources,name)>
+			<cfset super.setOracle(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# created.") />
+		<cfelseif compare(savedConfigHash,newConfigHash) neq 0>
+			<cfset super.setOracle(argumentcollection=arguments) />
+			<cfset putConfigHash(arguments.name,newConfigHash) />
+			<cfset logInfo("Datasource #arguments.name# updated.") />
+		<cfelse>		
+			<cfset logInfo("Datasource #arguments.name# not updated.") />	
+		</cfif>
+
+		<cfreturn />
+
+	</cffunction>
+
 	<cffunction name="hashArgs">
 		<cfargument name="args" required="true" type="struct" />
 		<cfset var serializedArgs = serializeArgs(arguments.args) />

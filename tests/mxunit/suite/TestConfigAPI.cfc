@@ -80,6 +80,10 @@
 
 	</cffunction>
 
+
+	<!--- MSSQL --->
+
+
 	<cffunction name="testCreateMSSQL">
 		<cfset var apiResult = "" />
 
@@ -260,6 +264,552 @@
 		<cfset assertEquals("200 SUCCESS",apiResult2.statusCode) />
 
 	</cffunction>
+
+
+	<!--- MySQL5 --->
+
+
+	<cffunction name="testCreateMySQL5">
+		<cfset var apiResult = "" />
+
+		<cfset var jsonStruct = { 
+					datasource = { 
+						MySQL5 = [ 
+						   {
+							 name = "test_mysql5", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test",
+							 disable_clob = false,
+							 disable_blob = false
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData = SerializeJSON(jsonStruct) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult.statusCode) />
+
+	</cffunction>
+
+	<cffunction name="testUpdateMySQL5NoChange">
+		<cfset var apiResult1 = "" />
+		<cfset var apiResult2 = "" />
+
+		<cfset var jsonStruct = { 
+					datasource = { 
+						MySQL5 = [ 
+						   {
+							 name = "test_mysql5", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test",
+							 disable_clob = false,
+							 disable_blob = false
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData = SerializeJSON(jsonStruct) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult1">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult1.statusCode) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult2">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		
+		<cfset assertEquals("200 SUCCESS",apiResult2.statusCode) />
+
+	</cffunction>
+
+	<cffunction name="testUpdateMySQL5NWithChange">
+		<cfset var apiResult1 = "" />
+		<cfset var apiResult2 = "" />
+
+		<cfset var jsonStruct1 = { 
+					datasource = { 
+						MySQL5 = [ 
+						   {
+							 name = "test_mysql5", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test",
+							 disable_clob = false,
+							 disable_blob = false
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData1 = SerializeJSON(jsonStruct1) />
+
+		<cfset var jsonStruct2 = { 
+					datasource = { 
+						MySQL5 = [ 
+						   {
+							 name = "test_mysql5", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test",
+							 disable_clob = true,
+							 disable_blob = true
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData2 = SerializeJSON(jsonStruct2) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult1">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData1#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult1.statusCode) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult2">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData2#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult2.statusCode) />
+
+	</cffunction>
+
+	<cffunction name="testUpdateMySQL5NWithPasswordChange">
+		<cfset var apiResult1 = "" />
+		<cfset var apiResult2 = "" />
+
+		<cfset var jsonStruct1 = { 
+					datasource = { 
+						MySQL5 = [ 
+						   {
+							 name = "test_mysql5", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test",
+							 disable_clob = false,
+							 disable_blob = false
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData1 = SerializeJSON(jsonStruct1) />
+
+		<cfset var jsonStruct2 = { 
+					datasource = { 
+						MySQL5 = [ 
+						   {
+							 name = "test_mysql5", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test2",
+							 disable_clob = false,
+							 disable_blob = false
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData2 = SerializeJSON(jsonStruct2) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult1">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData1#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult1.statusCode) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult2">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData2#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult2.statusCode) />
+
+	</cffunction>
+
+
+	<!--- MySQL_DD --->
+
+
+	<cffunction name="testCreateMySQL_DD">
+		<cfset var apiResult = "" />
+
+		<cfset var jsonStruct = { 
+					datasource = { 
+						MySQL_DD = [ 
+						   {
+							 name = "test_mysql_dd", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test",
+							 disable_clob = false,
+							 disable_blob = false
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData = SerializeJSON(jsonStruct) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult.statusCode) />
+
+	</cffunction>
+
+	<cffunction name="testUpdateMySQL_DDNoChange">
+		<cfset var apiResult1 = "" />
+		<cfset var apiResult2 = "" />
+
+		<cfset var jsonStruct = { 
+					datasource = { 
+						MySQL_DD = [ 
+						   {
+							 name = "test_mysql_dd", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test",
+							 disable_clob = false,
+							 disable_blob = false
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData = SerializeJSON(jsonStruct) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult1">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult1.statusCode) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult2">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		
+		<cfset assertEquals("200 SUCCESS",apiResult2.statusCode) />
+
+	</cffunction>
+
+	<cffunction name="testUpdateMySQL_DDNWithChange">
+		<cfset var apiResult1 = "" />
+		<cfset var apiResult2 = "" />
+
+		<cfset var jsonStruct1 = { 
+					datasource = { 
+						MySQL_DD = [ 
+						   {
+							 name = "test_mysql_dd", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test",
+							 disable_clob = false,
+							 disable_blob = false
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData1 = SerializeJSON(jsonStruct1) />
+
+		<cfset var jsonStruct2 = { 
+					datasource = { 
+						MySQL_DD = [ 
+						   {
+							 name = "test_mysql_dd", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test",
+							 disable_clob = true,
+							 disable_blob = true
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData2 = SerializeJSON(jsonStruct2) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult1">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData1#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult1.statusCode) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult2">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData2#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult2.statusCode) />
+
+	</cffunction>
+
+	<cffunction name="testUpdateMySQL_DDNWithPasswordChange">
+		<cfset var apiResult1 = "" />
+		<cfset var apiResult2 = "" />
+
+		<cfset var jsonStruct1 = { 
+					datasource = { 
+						MySQL_DD = [ 
+						   {
+							 name = "test_mysql_dd", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test",
+							 disable_clob = false,
+							 disable_blob = false
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData1 = SerializeJSON(jsonStruct1) />
+
+		<cfset var jsonStruct2 = { 
+					datasource = { 
+						MySQL_DD = [ 
+						   {
+							 name = "test_mysql_dd", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test2",
+							 disable_clob = false,
+							 disable_blob = false
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData2 = SerializeJSON(jsonStruct2) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult1">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData1#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult1.statusCode) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult2">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData2#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult2.statusCode) />
+
+	</cffunction>
+
+
+	<!--- Oracle --->
+
+
+	<cffunction name="testCreateOracle">
+		<cfset var apiResult = "" />
+
+		<cfset var jsonStruct = { 
+					datasource = { 
+						Oracle = [ 
+						   {
+							 name = "test_oracle", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test",
+							 sid = "ORCL",
+							 disable_clob = false,
+							 disable_blob = false
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData = SerializeJSON(jsonStruct) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult.statusCode) />
+
+	</cffunction>
+
+	<cffunction name="testUpdateOracleNoChange">
+		<cfset var apiResult1 = "" />
+		<cfset var apiResult2 = "" />
+
+		<cfset var jsonStruct = { 
+					datasource = { 
+						Oracle = [ 
+						   {
+							 name = "test_oracle", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test",
+							 sid = "ORCL",
+							 disable_clob = false,
+							 disable_blob = false
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData = SerializeJSON(jsonStruct) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult1">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult1.statusCode) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult2">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData#" />
+		</cfhttp>
+
+		
+		<cfset assertEquals("200 SUCCESS",apiResult2.statusCode) />
+
+	</cffunction>
+
+	<cffunction name="testUpdateOracleNWithChange">
+		<cfset var apiResult1 = "" />
+		<cfset var apiResult2 = "" />
+
+		<cfset var jsonStruct1 = { 
+					datasource = { 
+						Oracle = [ 
+						   {
+							 name = "test_oracle", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test",
+							 sid = "ORCL",
+							 disable_clob = false,
+							 disable_blob = false
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData1 = SerializeJSON(jsonStruct1) />
+
+		<cfset var jsonStruct2 = { 
+					datasource = { 
+						Oracle = [ 
+						   {
+							 name = "test_oracle", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test",
+							 sid = "ORCL",
+							 disable_clob = true,
+							 disable_blob = true
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData2 = SerializeJSON(jsonStruct2) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult1">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData1#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult1.statusCode) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult2">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData2#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult2.statusCode) />
+
+	</cffunction>
+
+	<cffunction name="testUpdateOracleNWithPasswordChange">
+		<cfset var apiResult1 = "" />
+		<cfset var apiResult2 = "" />
+
+		<cfset var jsonStruct1 = { 
+					datasource = { 
+						Oracle = [ 
+						   {
+							 name = "test_oracle", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test",
+							 sid = "ORCL",
+							 disable_clob = false,
+							 disable_blob = false
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData1 = SerializeJSON(jsonStruct1) />
+
+		<cfset var jsonStruct2 = { 
+					datasource = { 
+						Oracle = [ 
+						   {
+							 name = "test_oracle", 
+							 host = "sql.example.com",
+							 database = "test",
+							 username = "test",
+							 password = "test2",
+							 sid = "ORCL",
+							 disable_clob = false,
+							 disable_blob = false
+						   }
+						]
+					}
+				} />
+		<cfset var jsonData2 = SerializeJSON(jsonStruct2) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult1">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData1#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult1.statusCode) />
+
+		<cfhttp url="#variables.apiUrl#" method="post" username="#variables.username#" password="#variables.password#" result="apiResult2">
+			<cfhttpparam type="header" name="Content-Type" value="text/json" />
+			<cfhttpparam type="body" value="#jsonData2#" />
+		</cfhttp>
+
+		<cfset assertEquals("200 SUCCESS",apiResult2.statusCode) />
+
+	</cffunction>
+
+
+
 
 	<cffunction name="testApiCallWithMultipleSettings">
 		<cfset var apiResult = "" />		
