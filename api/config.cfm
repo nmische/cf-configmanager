@@ -65,6 +65,7 @@
                         <cfinvoke component="#adminComponent#" method="set#setter#" argumentCollection="#argCollection#" />
 
                         <!--- we're done here; iterate to next adminobj setter --->
+                        <cfset logInfo("Invoked #objName#.set#setter#. Arguments: #serializeJSON(args)#.") />
                         <cfcontinue />
                     </cfif>
 
