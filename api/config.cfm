@@ -70,16 +70,23 @@
                     </cfif>
 
                 </cfif>
-                <cfloop array="#invocations#" index="args">
-                    <cfinvoke component="#adminComponent#" method="set#setter#" argumentCollection="#args#" />
-                    <cfset logInfo("Invoked #objName#.set#setter#. Arguments: #serializeJSON(args)#.") />
-                </cfloop>
-                    
-                <cfcatch type="any">
-                    <cfset logError("Error invoking #objName#.set#setter#. Error Message: #cfcatch.message#. Arguments: #serializeJSON(args)#.") />
-                    <cfheader statuscode="500" statustext="Error: #cfcatch.message#" />
-                    <cfabort />
-                </cfcatch>
+                <cfif listContainsNoCase("clearComponentCache,clearTrustedCache", setter)>
+                    <cfloop array="#invocations#" index="args">
+                        <cfinvoke component="#adminComponent#" method="#setter#" argumentCollection="#args#" />
+                        <cfset logInfo("Invoked #objName#.#setter#. Arguments: #serializeJSON(args)#.") />
+                    </cfloop>
+                <cfelse>
+                    <cfloop array="#invocations#" index="args">
+                        <cfinvoke component="#adminComponent#" method="set#setter#" argumentCollection="#args#" />
+                        <cfset logInfo("Invoked #objName#.set#setter#. Arguments: #serializeJSON(args)#.") />
+                    </cfloop>
+                </cfif>
+
+            <cfcatch type="any">
+                <cfset logError("Error invoking #objName#.set#setter#. Error Message: #cfcatch.message#. Arguments: #serializeJSON(args)#.") />
+                <cfheader statuscode="500" statustext="Error: #cfcatch.message#" />
+                <cfabort />
+            </cfcatch>
 
             </cftry>
 
