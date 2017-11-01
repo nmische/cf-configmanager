@@ -11,7 +11,7 @@
         <cfelse>
             <cfset adminComponent = createObject("component","CFIDE.adminapi.#objName#") />
         </cfif>
-        
+
         <cfset adminObj = jsonData[objName] />
         <!---
         for each key in the admin api component struct, try to invoke the corresponding setter method
@@ -25,11 +25,11 @@
 
                 <cfloop array="#invocations#" index="args">
                     <cfinvoke component="#adminComponent#" method="set#setter#" argumentCollection="#args#" />
-                    <cfset logInfo("Invoked #objName#.set#setter#. Arguments: #serializeJSON(args)#.") />
+                    <cfset logInfo("Invoked #objName#.set#setter#. Arguments: REDACTED.") />
                 </cfloop>
 
                 <cfcatch type="any">
-                    <cfset logError("Error invoking #objName#.set#setter#. Error Message: #cfcatch.message#. Arguments: #serializeJSON(args)#.") />
+                    <cfset logError("Error invoking #objName#.set#setter#. Error Message: #cfcatch.message#. Arguments: REDACTED.") />
                     <cfheader statuscode="500" statustext="Error: #cfcatch.message#" />
                     <cfabort />
                 </cfcatch>
